@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />   
+
+		<title>CodePlayer!</title>
+	 
+		
+		<script type = "text/javascript" src="jQuery.min.js"></script>
+		
+		<script src="F:/Web Developer Course 2.0/JQuery/jquery-ui/jquery-ui.js"></script>
+		
+		<link href="F:/Web Developer Course 2.0/JQuery/codeplayer.css" rel="stylesheet" type="text/css">
+	
+	</head>
+	
+	
+	<body>
+	
+		<div id="header">
+		
+			<div id="logo">
+			
+				CodePlayer
+				
+			</div>
+			
+			<div id="buttonContainer">
+			
+				<div class="toggleButton active" id="html">HTML</div>
+				
+				<div class="toggleButton" id="css">CSS</div>
+				
+				<div class="toggleButton" id="javascript">JavaScript</div>
+				
+				<div class="toggleButton active" id="output">Output</div>
+			
+			</div>
+			
+		</div>
+		
+		<div id="bodyContainer">
+		
+			<textarea id="htmlPanel" class="panel"><p id="para">Hello World!</p></textarea> <!-- class panel because of styling the panels -->
+			
+			<textarea id="cssPanel" class="panel hidden">p { color:blue };</textarea> <!-- id's because to run them in when need to be executed -->
+			
+			<textarea id="javascriptPanel" class="panel hidden">document.getElementById("para").innerHTML = "Yameen";</textarea>
+			
+			<iframe id="outputPanel" class="panel" ></iframe>
+		</div>
+		
+		<script type="text/javascript">
+		
+			//For updating the output simultaneously with the code being written.
+			function updateOutput(){
+			
+			
+				$("iframe").contents().find("html").html("<html><head><style type = 'text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body></html>"); //brings in the html and css script into the output.
+			
+				document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val()); //evaluates the javascript as soon as its written.
+			
+			
+			}
+		
+			//For having the effect of hover being added and removed as well as the selected panel.
+			$(".toggleButton").hover(function(){
+			
+				$(this).addClass("highlightedButton"); //highlighetedButton keeps the clicking in and off to grey
+			
+			}, function(){
+			
+				$(this).removeClass("highlightedButton");
+			
+			
+			});
+			
+			//toggleButton class helps to keep the selected ones to active in a togglish manner.
+			// As well as removes the grey color quickly when the active's gone, helps to see clearly when its gone.
+			$(".toggleButton").click(function(){
+			
+				$(this).toggleClass("active");
+				$(this).removeClass("highlightedButton");
+				
+				var panelId = $(this).attr("id") + "Panel" ; //selects the button id and adds a value of Panel to it's id.
+				
+				$("#" + panelId).toggleClass("hidden"); //hides those when toggled off.
+				
+				var numberOfActivePanels = 4 - $('.hidden').length; //keeps the count of number of panels present.
+				
+				$(".panel").width(($(window).width() / numberOfActivePanels)- 10); //adjust there widths accordingly.
+		
+			
+			});
+			
+			
+			$(".panel").height($(window).height() - $("#header").height() - 15); //panel display's height.
+		
+			
+			$(".panel").width(($(window).width() / 2)- 10); //panels display's width when the page is loaded.
+		
+			updateOutput(); //updates the output.
+			
+			//Change event of a textarea - Updates as soon as something is being written on the text area.
+			$("textarea").on('change keyup paste', function() {
+			
+				updateOutput();
+				
+			});
+			
+		</script>
+	
+	</body>
+	
+	
+</html>
